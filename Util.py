@@ -12,4 +12,34 @@ def revBin(num): #reversed binary of non-binary num
 def getMaxLevel(leaf1, leaf2):
 	if levelNumber(leaf1) > levelNumber(leaf2):
 		leaf1  =leaf1 >> 1
-		#todo
+	elif levelNumber(leaf1) < levelNumber(leaf2):
+		leaf2 = leaf2>>1
+#how does this ensure that they are on the same level? what if one is 2 higher than the next
+	if leaf1==leaf2:
+		return levelNumber(leaf1);
+
+	else:
+		leaf1=revBin(leaf1)
+		leaf2=revBin(leaf2)
+		diff = leaf1^leaf2 #bitwise difference
+		t = (diff & (-diff))-1
+		assert t>0
+		return int(math.log(t,2))
+
+
+def getPathNodes(leaf):
+	result = []
+	while (leaf>0):
+		result.insert(0,leaf)
+		leaf = leaf>>1
+	return result
+
+def correctLeaf(leaf, treeSize, bit):
+    assert (leaf != 0), "0 leaf"
+    newLeaf = leaf
+    while newLeaf < int(treeSize / 2) + 1:
+        newLeaf = (newLeaf * 2) + bit
+    while newLeaf > treeSize:
+        newLeaf = int(newLeaf / 2)
+    if newLeaf != leaf:
+        return newLeaf
