@@ -6,12 +6,12 @@
 import random
 import Util
 import Block
-import DBFileSys
+#import DBFileSys
 import time
 
 class Tree:
     def __init__(self, nodeNumber, z, segmentSize):
-        self.useRAM = False
+        self.useRAM = Tru
             
         if self.useRAM:
             self._buckets = [0] * nodeNumber
