@@ -2,19 +2,11 @@ import Tree
 
 class Block:
   
-    def __init__(self, path, data):
+    def __init__(self, leaf, segID, data):
         self.path = path
-        self.data = data
-        if data is None or data == "dummy":
-            self.dummy = True
-        else:
-            self.dummy = False
-        self.moveDown()
-    
-    def moveDown(self):
-        print "whee"
-         #follow the path
-    
+        self.leaf = leaf
+        self.segID = segID
+
     def getData(self):
         return data
   
@@ -22,9 +14,12 @@ class Block:
         self.data = new_data
         return self.data
     
-    def getPath(self):
-        return self.path
+    def getLeaf(self):
+        return self.leaf
   
-    def setPath(self, new_path):
-        self.path = new_path
-        return self.path
+    def setLeaf(self, new_leaf):
+        self.leaf = new_leaf
+        return self.leaf
+    
+    def getSegID(self):
+        return self.segID

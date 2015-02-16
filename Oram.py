@@ -7,25 +7,15 @@ import PosMap
 class Oram:
     def __init__(self, treeSize, z, segmentSize, maxStashSize, growR, targetR, shrinkR): # grow/shrink triggered by ratio (buckets * z) / (# of segments)
         self._z = z
-        self._tree = Tree.Tree(treeSize, z, segmentSize)
+        self._tree = Tree(treeSize, z, []) #changed to fix the existing constructor on the tree class I (akiva) wrote
         self._stash = Stash.Stash(z)
         self._posMap = PosMap.PosMap()
         self._c = maxStashSize
 
-        self._growR = growR
-        self._targetR = targetR
-        self._shrinkR = shrinkR
-
         self._segCounter = 0
 
-        self.autoResize = True
-        self.showResize = False
-        self.recordResize = False
-        if self.recordResize:
-            self.GSOut = open("gs.csv", "w")
-
         self.useVCache = True
-        self.debug = False
+        self.debug = True
         
         self.VCacheCounter = 0
         self.totalCounter= 0
@@ -41,13 +31,6 @@ class Oram:
             if self.debug:
                 print("backEv")
             self.access("backEv", [0], [None])
-
-        if self.autoResize == True and self._segCounter != 0:
-            currentR = (self._tree.getSize() * self._z) / self._segCounter
-            if currentR < self._growR:
-                self.grow(int(((self._targetR - currentR) * self._segCounter) / self._z))
-            elif currentR > self._shrinkR:
-                self.shrink(int(((currentR - self._targetR) * self._segCounter) / self._z))
 
         for i in range(len(dataList)):
             if isinstance(dataList[i], str):
@@ -79,9 +62,6 @@ class Oram:
                 else:
                     dataList[i] = reqResult.getData()
 
-        if self.recordResize:
-            self.GSOut.write(str(self._segCounter) + "," + str(self._tree.getSize() * self._z) + "\n")
-                
         if all(x is None for x in segIDList):
             return dataList
         else:
@@ -162,34 +142,7 @@ class Oram:
         return self.access("write", segIDList, dataList)
 
     def multiDelete(self, segIDList):
-        return self.access("delete", segIDList, [None] * len(segIDList))
-
-    def grow(self, numLeaves):
-        if numLeaves == 0:
-            return None
-        assert (numLeaves > 0), "illegal growth amount"
-        if numLeaves % 2 == 1:
-            numLeaves -= 1
-        if self.showResize:
-            print("growing by", numLeaves)
-        self._tree.grow(numLeaves)
-        self._stash.correctLeaves(self._tree.getSize())
-        self._posMap.correctLeaves(self._tree.getSize())
-
-    def shrink(self, numLeaves):
-        if numLeaves == 0:
-            return None
-        assert (numLeaves > 0), "illegal shrinkage amount"
-        if numLeaves % 2 == 1:
-            numLeaves -= 1
-        if self.showResize:
-            print("shrinking by", numLeaves)
-        dump = self._tree.shrink(numLeaves)
-        for block in dump:
-            if block.getSegID() != 0:
-                self._stash.addNode(block)
-        self._stash.correctLeaves(self._tree.getSize())
-        self._posMap.correctLeaves(self._tree.getSize())
+        return self.access("delete", segIDList, [None] * len(segIDList))    
 
     def setPosMap(self, dictionary):
         self._posMap.setMap(dictionary)
