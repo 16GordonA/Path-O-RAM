@@ -1,11 +1,11 @@
 import Oram
-import UserFileSys
+#import UserFileSys
 import random
 import time
 import os
 import shutil
 import cProfile
-import Encryptor
+#import Encryptor
 import pickle
 
 from os.path import expanduser
@@ -16,7 +16,9 @@ key = "16characterslong"
 
 def TestBasic() :
     oramsize = 1 << 4 - 1
-    oram = Oram.Oram(oramsize, 4, 100)
+    oramsize = 31
+    max_stash = 100
+    oram = Oram.Oram(oramsize, 4, 100, max_stash, 1,1,1)
     for key in range(0, oramsize) :
         oram.write(key, str(key))
     for key in range(0, oramsize) :
@@ -186,14 +188,14 @@ def ORAMvsNormal():
         data = inputFile.read()
         inputFile.close()
         start = time.clock()
-        data = Encryptor.encrypt(data, key)
+        #data = Encryptor.encrypt(data, key)
         outputFile = open(fileName[:-4] + "_encrypted.txt", "wb")
         pickle.dump(data, outputFile)
         outputFile.close()
         inputFile = open(fileName[:-4] + "_encrypted.txt", "rb")
         data = pickle.load(inputFile)
         inputFile.close()
-        data = Encryptor.decrypt(data, key)
+        #data = Encryptor.decrypt(data, key)
         timeTaken = time.clock() - start
         total += timeTaken
     print(total)
@@ -373,19 +375,19 @@ def PlotGS():
         print(i)
     oram._oram.GSOut.close()
  
-#TestBasic()
-#TestRepeatRW()
-#TestGeneral()
+TestBasic()
+TestRepeatRW()
+TestGeneral()
 #cProfile.run('TestGeneral()')
-#TestBackEv()
+TestBackEv()
 #cProfile.run('ORAMvsNormal()')
 # ORAMvsNormal()
 # print()
-# TestSegSize()
+TestSegSize()
 # print()
-# TestMultiBlock()
+TestMultiBlock()
 # print()
-TestBlockPack("TestFiles/test16.txt")
+# TestBlockPack("TestFiles/test16.txt")
 # TestBlockPack("TestFiles/test32.txt")
 # TestBlockPack("TestFiles/test70.txt")
 #TestGrowShrink("overhead")

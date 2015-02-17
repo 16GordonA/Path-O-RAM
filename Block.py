@@ -3,7 +3,7 @@ import Tree
 class Block:
   
     def __init__(self, leaf, segID, data):
-        self.path = path
+        self.data = data
         self.leaf = leaf
         self.segID = segID
 

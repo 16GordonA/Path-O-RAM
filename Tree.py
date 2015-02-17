@@ -11,7 +11,7 @@ import time
 
 class Tree:
     def __init__(self, nodeNumber, z, segmentSize):
-        self.useRAM = Tru
+        self.useRAM = True
             
         if self.useRAM:
             self._buckets = [0] * nodeNumber
