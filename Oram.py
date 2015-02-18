@@ -77,8 +77,8 @@ class Oram:
             return self.treeAccess(action, segIDList, dataList, leaf, newLeaf)
     
     def pickLeaf(self):
-        #newLeaf=self._tree.ringLeaf()
-        newLeaf = self._tree.randomLeaf()
+        newLeaf=self._tree.ringLeaf()
+        #newLeaf = self._tree.randomLeaf()
         
         return newLeaf
     

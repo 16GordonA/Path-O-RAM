@@ -37,10 +37,12 @@ class Tree:
     def ringLeaf(self):
         binary = bin(Tree._numAccesses)[2:].zfill(self._height)
         binary = binary[::-1]
-        Tree._numAccesses+=1
+        Tree._numAccesses = (Tree._numAccesses)%(2**self._height)
+        Tree._numAccesses += 1
         return int(binary,2)
 
     def readBucket(self, bucketID):
+        print("BucketID is " + str(bucketID))
         if self.useRAM:
             return self._buckets[bucketID - 1]
         else:
