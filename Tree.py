@@ -19,7 +19,7 @@ class Tree:
         
         assert (nodeNumber % 2 == 1), "tree must have odd number of buckets"
         self._size = nodeNumber
-        self._height = math.log(self._size+1,2)
+        self._height = int(math.log(self._size+1,2))
         self._z = z
         self._segmentSize = segmentSize
         self.numGrowth = 0
