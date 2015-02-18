@@ -22,7 +22,8 @@ def TestBasic() :
         oram.write(key, str(key))
     for key in range(0, oramsize) :
         try :
-            getvalue = oram.read(key).decode("utf-8")
+            getvalue = oram.read(key)#.decode("utf-8")
+            print "Your E(x) is: " + getvalue
             assert (getvalue == str(key))
         except :
             print( "[TestBasic] key=%d. expecting %s but got %s" % (key, str(key), getvalue) )
@@ -39,7 +40,7 @@ def TestRepeatRW() :
         oram.write(key, str(key))
     for key in range(0, oramsize) :
         try :
-            getvalue = oram.read(key).decode("utf-8")
+            getvalue = oram.read(key)#.decode("utf-8")
             assert (getvalue == str(key))
             oram.write(key, 'v')
         except :
@@ -96,7 +97,7 @@ def TestGeneral() :
         elif (operation <.6):
             if (check[key] != ""):
                 try:
-                    getValue = oram.read(key).decode("utf-8")	
+                    getValue = oram.read(key)#.decode("utf-8")	
                     assert (getValue == check[key])
                 except:
                     print( "[TestGeneral] key=%d. expecting %s but got %s" % (key, check[key], getValue) )

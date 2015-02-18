@@ -1,7 +1,9 @@
+'''
 from Crypto.Cipher import AES
 from Crypto.Util import strxor, Counter
 from random import randint
 import os
+'''
 
 def mask(key, maskNum):
     cipher = AES.new(key, AES.MODE_ECB) 
