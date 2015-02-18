@@ -16,30 +16,34 @@ key = "16characterslong"
 
 def TestBasic() :
     oramsize = (1 << 4) - 1
-    max_stash = 100
-    oram = Oram.Oram(oramsize, 4, 100, max_stash, 1,1,1)
+    max_stash = 300
+    oram = Oram.Oram(oramsize, 4, 4, max_stash, 1,1,1)
     for key in range(1, oramsize) :
         oram.write(key, str(key))
+    passed = True
     for key in range(1, oramsize) :
         try :
-            print "reached try"
             getvalue = oram.read(key)#.decode("utf-8")
-            print "Your E(x) is: " + getvalue
             assert (getvalue == str(key))
+            print("[TestBasic] found %s at key = %d" %( getvalue, key))
         except :
             print( "[TestBasic] key=%d. expecting %s but got %s" % (key, str(key), getvalue) )
-            print( "TestBasic failed." )
+            passed = False
 
         print(oram._stash.getSize())
-    print( "TestBasic Passed." )
+    if passed:
+        print( "TestBasic PASSED." )
+    else:
+        print( "TestBasic FAILED." )
 
 def TestRepeatRW() :
-    oramsize = 1 << 4 - 1
+    oramsize = (1 << 4) - 1
+    max_stash = 200
     oram = Oram.Oram(oramsize, 4, 100, max_stash, 1,1,1)
     db = {}
-    for key in range(0, oramsize) :
+    for key in range(1, oramsize) :
         oram.write(key, str(key))
-    for key in range(0, oramsize) :
+    for key in range(1, oramsize) :
         try :
             getvalue = oram.read(key)#.decode("utf-8")
             assert (getvalue == str(key))
@@ -377,16 +381,16 @@ def PlotGS():
     oram._oram.GSOut.close()
  
 TestBasic()
-TestRepeatRW()
-TestGeneral()
+#TestRepeatRW()
+#TestGeneral()
 #cProfile.run('TestGeneral()')
-TestBackEv()
+#TestBackEv()
 #cProfile.run('ORAMvsNormal()')
 # ORAMvsNormal()
 # print()
-TestSegSize()
+#TestSegSize()
 # print()
-TestMultiBlock()
+#TestMultiBlock()
 # print()
 # TestBlockPack("TestFiles/test16.txt")
 # TestBlockPack("TestFiles/test32.txt")

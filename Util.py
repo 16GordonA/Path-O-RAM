@@ -4,15 +4,19 @@ import math
 #utility functions
 
 def levelNumber(leaf):#returns the level a leaf is on (used in getMaxLevel)
+	#print ("Leaf is " + str(leaf))
 	return int(math.log(leaf,2))
 
 def revBin(num): #reversed binary of non-binary num
 	return int(bin(num)[::-1][:-2],2) #what does this notation mean?
 
 def getMaxLevel(leaf1, leaf2):
+	#print (str(leaf1) + " and " + str(leaf2))
 	if levelNumber(leaf1) > levelNumber(leaf2):
-		leaf1  =leaf1 >> 1
+		return levelNumber(leaf1)
+		leaf1 = leaf1 >> 1
 	elif levelNumber(leaf1) < levelNumber(leaf2):
+		return levelNumber(leaf2)
 		leaf2 = leaf2>>1
 #how does this ensure that they are on the same level? what if one is 2 higher than the next
 	if leaf1==leaf2:
@@ -23,7 +27,7 @@ def getMaxLevel(leaf1, leaf2):
 		leaf2=revBin(leaf2)
 		diff = leaf1^leaf2 #bitwise difference
 		t = (diff & (-diff))-1
-		assert t>0
+		assert t>0, "t = " + str(t)
 		return int(math.log(t,2))
 
 

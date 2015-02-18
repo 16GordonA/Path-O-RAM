@@ -15,7 +15,7 @@ class Oram:
         self._segCounter = 0
 
         self.useVCache = True
-        self.debug = True
+        self.debug = False
         
         self.VCacheCounter = 0
         self.totalCounter= 0
@@ -34,10 +34,9 @@ class Oram:
 
         for i in range(len(dataList)):
             if isinstance(dataList[i], str):
-                dataList[i] = dataList[i].encode("utf-8")
-
-        newLeaf=self._tree.ringLeaf()
-        #newLeaf = self._tree.randomLeaf()
+                dataList[i] = dataList[i]#.encode("utf-8")
+        
+        newLeaf = self.pickLeaf()
 
         for i in range(len(dataList)):
             reqResult = self._stash.request(segIDList[i])
@@ -71,12 +70,18 @@ class Oram:
             leaf = self._posMap.lookup(segID)
             if leaf == -1:
                 assert ((action != "read" and segID > 0) or action == "backEv" or action == "dummy"), "tried to " + action + " nonexistent segID: " + str(segID)
-                leaf = self._tree.randomLeaf()
+                leaf = self.pickLeaf()
             if self.debug:
                 print("\treading from path ", leaf)
 
             return self.treeAccess(action, segIDList, dataList, leaf, newLeaf)
-
+    
+    def pickLeaf(self):
+        #newLeaf=self._tree.ringLeaf()
+        newLeaf = self._tree.randomLeaf()
+        
+        return newLeaf
+    
     def treeAccess(self, action, segIDList, dataList, leaf, newLeaf):
         transfer = self._tree.readPath(leaf)
         result = dataList

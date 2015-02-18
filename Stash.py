@@ -29,7 +29,7 @@ class Stash:
         for i in range(len(self._nodes)):
             if self._nodes[i].getSegID() == segID:
                 return self._nodes.pop(i)                # request just returns the node if found
-                       
+                    
         return "not found"
 
     def evict(self, leaf):            # returns list of the blocks that go in each node on the path as a 2d list, should compare IDs and return if found as well
@@ -38,13 +38,13 @@ class Stash:
         for i in range(numLevels):
             result[i] = [Block.Block(0, 0, b"")] * self._z
 	
-        stashIter = 0
+        stashIter = 1
         full = math.pow(2, numLevels) - 1    # "full vector" which has numLevel digits, and 1 means bucket has room for more
         pathVec = [0] * numLevels           # holds number of blocks in bucket occupied
         
         while stashIter < len(self._nodes):                                  # put nodes in the list where 0th element is 0th level, etc.
             if self._oldStash == False:
-               
+                
                 legalLevels = Util.getMaxLevel(leaf, self._nodes[stashIter].getLeaf())     # gets the number that tells which levels are allowed
                 #print(str(leaf) + ", " + str(self._nodes[stashIter].getLeaf()))
                 #print("legalLevels: "  + str(legalLevels))
@@ -66,8 +66,10 @@ class Stash:
                     
             
             else:
+                #print ('stashIter = ' + str(stashIter))
                 curLevel = Util.getMaxLevel(leaf, self._nodes[stashIter].getLeaf())                
-                while curLevel > -1:             
+                while curLevel > -1:
+                    #print ('curLevel is ' + str(curLevel))        
                     if pathVec[curLevel] < self._z:
                         result[curLevel][pathVec[curLevel]] = self._nodes[stashIter]
                         self.deleteNode(stashIter)
