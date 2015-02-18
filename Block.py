@@ -8,7 +8,7 @@ class Block:
         self.segID = segID
 
     def getData(self):
-        return data
+        return self.data
   
     def setData(self, new_data):
         self.data = new_data

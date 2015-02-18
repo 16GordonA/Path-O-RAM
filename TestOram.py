@@ -18,7 +18,7 @@ def TestBasic() :
     oramsize = (1 << 4) - 1
     max_stash = 100
     oram = Oram.Oram(oramsize, 4, 100, max_stash, 1,1,1)
-    for key in range(0, oramsize) :
+    for key in range(1, oramsize) :
         oram.write(key, str(key))
     for key in range(0, oramsize) :
         try :
