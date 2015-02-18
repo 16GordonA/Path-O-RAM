@@ -22,7 +22,6 @@ class Tree:
         self._height = math.log(self._size+1,2)
         self._z = z
         self._segmentSize = segmentSize
-        self._numAccesses = 0
         self.numGrowth = 0
         self.totalTimeGrowth = 0
         
