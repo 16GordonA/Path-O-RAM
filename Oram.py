@@ -5,6 +5,9 @@ import Stash
 import PosMap
 
 class Oram:
+    _A = 2 #eviction period
+    _accesses = 0 #number of accesses so far
+    
     def __init__(self, treeSize, z, segmentSize, maxStashSize, growR, targetR, shrinkR): # grow/shrink triggered by ratio (buckets * z) / (# of segments)
         self._z = z
         self._tree = Tree(treeSize, z, segmentSize) #changed to fix the existing constructor on the tree class I (akiva) wrote
@@ -121,15 +124,22 @@ class Oram:
                 result[i] = None
                 if self.debug:
                     print("new block inserted")
-                
-        outPath = self._stash.evict(leaf)
+        
+        if Oram._accesses % Oram._A == 0:       
+            outPath = self._stash.evict(leaf)
+            print("Evicted")
+        else:
+            print("Chose to not Evict")
+        Oram._accesses += 1
         if self.debug:
             print("\twriting to path", leaf)
             for bucket in outPath:
                 for block in bucket:
                     print("\t\t", block.getLeaf(), block.getSegID(), block.getData())
                 print("")
-        self._tree.writePath(leaf, outPath)
+                
+        if(Oram._accesses - 1)%Oram._A == 0:
+            self._tree.writePath(leaf, outPath)
         return result
 
     def read(self, segID):
