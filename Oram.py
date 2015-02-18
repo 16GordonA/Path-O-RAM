@@ -36,7 +36,8 @@ class Oram:
             if isinstance(dataList[i], str):
                 dataList[i] = dataList[i].encode("utf-8")
 
-        newLeaf = self._tree.randomLeaf()
+        newLeaf=self._tree.ringLeaf()
+        #newLeaf = self._tree.randomLeaf()
 
         for i in range(len(dataList)):
             reqResult = self._stash.request(segIDList[i])

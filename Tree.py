@@ -8,7 +8,7 @@ import Util
 import Block
 #import DBFileSys
 import time
-
+import math
 class Tree:
     def __init__(self, nodeNumber, z, segmentSize):
         self.useRAM = True
@@ -18,9 +18,10 @@ class Tree:
         
         assert (nodeNumber % 2 == 1), "tree must have odd number of buckets"
         self._size = nodeNumber
+        self._height = math.log(self._size+1,2)
         self._z = z
         self._segmentSize = segmentSize
-
+        self._numAccesses = 0
         self.numGrowth = 0
         self.totalTimeGrowth = 0
         
@@ -33,6 +34,12 @@ class Tree:
     def randomLeaf(self):
         return random.randint(int(self._size / 2) + 1, self._size)
     
+    def ringLeaf(self):
+        binary = bin(self._numAccesses)[2:].zfill(self._height)
+        binary = binary[::-1]
+        self._numAccesses+=1
+        return int(binary,2)
+
     def readBucket(self, bucketID):
         if self.useRAM:
             return self._buckets[bucketID - 1]
