@@ -10,6 +10,7 @@ import Block
 import time
 import math
 class Tree:
+    _numAccesses = 0
     def __init__(self, nodeNumber, z, segmentSize):
         self.useRAM = True
             
@@ -35,9 +36,9 @@ class Tree:
         return random.randint(int(self._size / 2) + 1, self._size)
     
     def ringLeaf(self):
-        binary = bin(self._numAccesses)[2:].zfill(self._height)
+        binary = bin(Tree._numAccesses)[2:].zfill(self._height)
         binary = binary[::-1]
-        self._numAccesses+=1
+        Tree._numAccesses+=1
         return int(binary,2)
 
     def readBucket(self, bucketID):

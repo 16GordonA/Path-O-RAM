@@ -20,8 +20,9 @@ def TestBasic() :
     oram = Oram.Oram(oramsize, 4, 100, max_stash, 1,1,1)
     for key in range(1, oramsize) :
         oram.write(key, str(key))
-    for key in range(0, oramsize) :
+    for key in range(1, oramsize) :
         try :
+            print "reached try"
             getvalue = oram.read(key)#.decode("utf-8")
             print "Your E(x) is: " + getvalue
             assert (getvalue == str(key))
@@ -34,7 +35,7 @@ def TestBasic() :
 
 def TestRepeatRW() :
     oramsize = 1 << 4 - 1
-    oram = Oram.Oram(oramsize, 4, 100)
+    oram = Oram.Oram(oramsize, 4, 100, max_stash, 1,1,1)
     db = {}
     for key in range(0, oramsize) :
         oram.write(key, str(key))
