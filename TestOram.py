@@ -30,7 +30,7 @@ def TestBasic() :
             print( "[TestBasic] key=%d. expecting %s but got %s" % (key, str(key), getvalue) )
             passed = False
 
-        print(oram._stash.getSize())
+        #print(oram._stash.getSize())
     if passed:
         print( "TestBasic PASSED." )
     else:
