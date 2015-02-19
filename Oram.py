@@ -75,7 +75,7 @@ class Oram:
             leaf = self._posMap.lookup(segID)
             if leaf == -1:
                 assert ((action != "read" and segID > 0) or action == "backEv" or action == "dummy"), "tried to " + action + " nonexistent segID: " + str(segID)
-                leaf = self.pickLeaf()
+                leaf = self.pickRandomLeaf()
             if self.debug:
                 print("\treading from path ", leaf)
 
