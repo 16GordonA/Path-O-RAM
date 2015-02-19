@@ -5,7 +5,7 @@ import Stash
 import PosMap
 
 class Oram:
-    _A = 2 #eviction period
+    _A = 1 #eviction period
     _accesses = 0 #number of accesses so far
     
     def __init__(self, treeSize, z, segmentSize, maxStashSize, growR, targetR, shrinkR): # grow/shrink triggered by ratio (buckets * z) / (# of segments)
@@ -38,8 +38,10 @@ class Oram:
         for i in range(len(dataList)):
             if isinstance(dataList[i], str):
                 dataList[i] = dataList[i]#.encode("utf-8")
-        
-        newLeaf = self.pickLeaf()
+                
+        newLeaf = self.pickRandomLeaf() # THIS IS Pnew - AKA RANDOMLEAF()
+
+        RLOLeaf = self.pickRLOLeaf()#TODO - implement RLOLeaf - which would take the place of "leaf" - Prlo assumes the role of Paccess
 
         for i in range(len(dataList)):
             reqResult = self._stash.request(segIDList[i])
@@ -79,11 +81,14 @@ class Oram:
 
             return self.treeAccess(action, segIDList, dataList, leaf, newLeaf)
     
-    def pickLeaf(self):
-        newLeaf=self._tree.ringLeaf()
-        #newLeaf = self._tree.randomLeaf()
+    def pickRandomLeaf(self):
+        
+        newLeaf = self._tree.randomLeaf()
         
         return newLeaf
+
+    def pickRLOLeaf(self):
+        newLeaf=self._tree.ringLeaf()
     
     def treeAccess(self, action, segIDList, dataList, leaf, newLeaf):
         transfer = self._tree.readPath(leaf)
