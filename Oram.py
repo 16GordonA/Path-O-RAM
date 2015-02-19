@@ -79,7 +79,7 @@ class Oram:
             if self.debug:
                 print("\treading from path ", leaf)
 
-            return self.treeAccess(action, segIDList, dataList, leaf, newLeaf)
+            return self.treeAccess(action, segIDList, dataList, leaf, newLeaf, RLOLeaf)
     
     def pickRandomLeaf(self):
         
@@ -90,7 +90,7 @@ class Oram:
     def pickRLOLeaf(self):
         newLeaf=self._tree.ringLeaf()
     
-    def treeAccess(self, action, segIDList, dataList, leaf, newLeaf):
+    def treeAccess(self, action, segIDList, dataList, leaf, newLeaf, RLOLeaf):
         transfer = self._tree.readPath(leaf)
         result = dataList
 
