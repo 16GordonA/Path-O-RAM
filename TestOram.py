@@ -16,6 +16,7 @@ key = "16characterslong"
 
 def TestBasic() :
     oramsize = (1 << 4) - 1
+    print(oramsize)
     max_stash = 300
     oram = Oram.Oram(oramsize, 4, 4, max_stash, 1,1,1)
     for key in range(1, oramsize) :

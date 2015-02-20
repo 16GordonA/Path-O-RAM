@@ -10,7 +10,7 @@ import Block
 import time
 import math
 class Tree:
-    _numAccesses = 0
+    _numAccesses = 1 #because leaf 0 does not exist
     def __init__(self, nodeNumber, z, segmentSize):
         self.useRAM = True
             
@@ -36,6 +36,7 @@ class Tree:
     
     def ringLeaf(self):
         binary = bin(Tree._numAccesses)[2:].zfill(self._height)
+        print (str(binary))
         binary = binary[::-1]
         Tree._numAccesses = (Tree._numAccesses)%(int(math.pow(2,self._height)))
         Tree._numAccesses += 1

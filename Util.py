@@ -5,8 +5,10 @@ import math
 
 def levelNumber(leaf):#returns the level a leaf is on (used in getMaxLevel)
 	#print ("Leaf is " + str(leaf))
-	return int(math.log(leaf,2))
-
+	a = int(math.log(leaf,2))
+	if(leaf == 2**a):
+		return a #- 1
+	return a
 def revBin(num): #reversed binary of non-binary num
 	return int(bin(num)[::-1][:-2],2) #what does this notation mean?
 
