@@ -90,8 +90,8 @@ class Oram:
 
     def pickRLOLeaf(self):
         newLeaf=self._tree.ringLeaf()
-        return newLeaf #we need to be remembering these return statements...
-    
+        return newLeaf 
+
     def treeAccess(self, action, segIDList, dataList, leaf, newLeaf, RLOLeaf):
         transfer = self._tree.readPath(leaf)
         result = dataList
@@ -135,7 +135,7 @@ class Oram:
         if Oram._accesses % Oram._A == 0:
             if(self.ring):       
                 evictpath = (RLOLeaf) #if ring oram
-                print evictpath
+                print(evictpath)
             else:
                 evictpath = (leaf)
             outPath = self._stash.evict(evictpath)
