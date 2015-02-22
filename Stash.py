@@ -23,6 +23,7 @@ class Stash:
 
     def setNodes(self, someList):
         self._nodes = someList
+        return self._nodes
 
     def request(self, segID):
         
