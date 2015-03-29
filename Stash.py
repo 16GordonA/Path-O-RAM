@@ -68,12 +68,12 @@ class Stash:
             
             else:
                 #print ('stashIter = ' + str(stashIter))
-                print (self._nodes[stashIter].getLeaf())
+                #print (self._nodes[stashIter].getLeaf())
                 curLevel = Util.getMaxLevel(leaf, self._nodes[stashIter].getLeaf())
-                if curLevel == len(pathVec):
-                    print("uh oh")               
+                #if curLevel == len(pathVec):
+                    #print("uh oh")               
                 while curLevel > -1:
-                    print ('curLevel is ' + str(curLevel))        
+                    #print ('curLevel is ' + str(curLevel))        
                     if pathVec[curLevel] < self._z:
                         result[curLevel][pathVec[curLevel]] = self._nodes[stashIter]
                         self.deleteNode(stashIter)

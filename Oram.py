@@ -143,7 +143,7 @@ class Oram:
     def evict(self, segIDList, dataList, leaf, newLeaf, RLOLeaf):
         if(self.ring):       
             evictpath = (RLOLeaf) #if ring oram
-            print(evictpath)
+            #print(evictpath)
         else:
             evictpath = (leaf)
         outPath = self._stash.evict(evictpath)
