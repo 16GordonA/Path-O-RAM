@@ -38,7 +38,9 @@ class Tree:
         binary = bin(Tree._numAccesses)[2:].zfill(self._height)
         print (str(binary))
         binary = binary[::-1]
-        Tree._numAccesses = (Tree._numAccesses)%(int(math.pow(2,self._height)))
+        Tree._numAccesses = (Tree._numAccesses)%(self._size)
+        if Tree._numAccesses == 0:
+            Tree._numAccesses = int(self._size / 2)
         Tree._numAccesses += 1
         return int(binary,2)
 
