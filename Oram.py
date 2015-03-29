@@ -133,27 +133,30 @@ class Oram:
                     print("new block inserted")
         
         if Oram._accesses % Oram._A == 0:
-            if(self.ring):       
-                evictpath = (RLOLeaf) #if ring oram
-                print(evictpath)
-            else:
-                evictpath = (leaf)
-            outPath = self._stash.evict(evictpath)
-            print("Evicted")
-            if self.debug: #I'm not sure what this is supposed to mean, so I'm just gonna ignore it
-                           #However, I'm fairly positive it goes under eviction process...
-                print("\twriting to path", evictpath)
-                for bucket in outPath:
-                    for block in bucket:
-                        print("\t\t", block.getLeaf(), block.getSegID(), block.getData())
-                    print("")
-            self._tree.writePath(leaf, outPath) #not totally sure, but i think leaf is old path, outpath is new path
-            
+            self.evict(segIDList, dataList, leaf, newLeaf, RLOLeaf)
+                    
         else:
             print("Chose to not Evict")
         Oram._accesses += 1
         return result
-
+    
+    def evict(self, segIDList, dataList, leaf, newLeaf, RLOLeaf):
+        if(self.ring):       
+            evictpath = (RLOLeaf) #if ring oram
+            print(evictpath)
+        else:
+            evictpath = (leaf)
+        outPath = self._stash.evict(evictpath)
+        print("Evicted")
+        if self.debug: #I'm not sure what this is supposed to mean, so I'm just gonna ignore it
+                       #However, I'm fairly positive it goes under eviction process...
+            print("\twriting to path", evictpath)
+            for bucket in outPath:
+                for block in bucket:
+                    print("\t\t", block.getLeaf(), block.getSegID(), block.getData())
+                print("")
+        self._tree.writePath(leaf, outPath) #not totally sure, but i think leaf is old path, outpath is new path
+    
     def read(self, segID):
         return self.access("read", [segID], [None])[0]
 
