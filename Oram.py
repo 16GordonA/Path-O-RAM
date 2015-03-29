@@ -42,7 +42,7 @@ class Oram:
                 
         newLeaf = self.pickRandomLeaf() # THIS IS Pnew - AKA RANDOMLEAF()
 
-        RLOLeaf = self.pickRLOLeaf()#TODO - implement RLOLeaf - which would take the place of "leaf" - Prlo assumes the role of Paccess
+        RLOLeaf = self.pickRLOLeaf()# Prlo assumes the role of Paccess
 
         for i in range(len(dataList)):
             reqResult = self._stash.request(segIDList[i])
@@ -74,9 +74,11 @@ class Oram:
             segID = segIDList[0]
             segID = next(x for x in segIDList if x is not None)
             leaf = self._posMap.lookup(segID)
+            #print("segID = " + str(segID) + ". leaf = " + str(leaf))
             if leaf == -1:
                 assert ((action != "read" and segID > 0) or action == "backEv" or action == "dummy"), "tried to " + action + " nonexistent segID: " + str(segID)
                 leaf = self.pickRandomLeaf()
+                #print("New leaf is now " + str(leaf))
             if self.debug:
                 print("\treading from path ", leaf)
 
@@ -135,8 +137,9 @@ class Oram:
         if Oram._accesses % Oram._A == 0:
             self.evict(segIDList, dataList, leaf, newLeaf, RLOLeaf)
                     
-        else:
-            print("Chose to not Evict")
+        #else:
+            #print("Chose to not Evict")
+
         Oram._accesses += 1
         return result
     
@@ -147,7 +150,7 @@ class Oram:
         else:
             evictpath = (leaf)
         outPath = self._stash.evict(evictpath)
-        print("Evicted")
+        #print("Evicted")
         if self.debug: #I'm not sure what this is supposed to mean, so I'm just gonna ignore it
                        #However, I'm fairly positive it goes under eviction process...
             print("\twriting to path", evictpath)

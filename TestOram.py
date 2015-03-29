@@ -21,21 +21,22 @@ def TestBasic() :
     oram = Oram.Oram(oramsize, 4, 4, max_stash, 1,1,1)
     for key in range(1, oramsize) :
         oram.write(key, str(key))
-    passed = True
+    passed = oramsize - 1
+    
     for key in range(1, oramsize) :
         try :
             getvalue = oram.read(key)#.decode("utf-8")
             assert (getvalue == str(key))
             print("[TestBasic] found %s at key = %d" %( getvalue, key))
         except :
-            print( "[TestBasic] key=%d. expecting %s but got %s" % (key, str(key), getvalue) )
-            passed = False
+            print( "[TestBasic] key = %d. Expecting %s but got %s" % (key, str(key), getvalue) )
+            passed -= 1
 
         #print(oram._stash.getSize())
-    if passed:
+    if passed == oramsize - 1:
         print( "TestBasic PASSED." )
     else:
-        print( "TestBasic FAILED." )
+        print( "TestBasic FAILED. \n" + str(passed) + "/"+ str(oramsize - 1) + " sucessful")
 
 def TestRepeatRW() :
     oramsize = (1 << 4) - 1
