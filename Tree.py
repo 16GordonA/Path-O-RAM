@@ -9,8 +9,9 @@ import Block
 #import DBFileSys
 import time
 import math
+from imaplib import Response_code
 class Tree:
-    _numAccesses = 1 #because leaf 0 does not exist
+    _numAccesses = 0
     def __init__(self, nodeNumber, z, segmentSize):
         self.useRAM = True
             
@@ -35,14 +36,14 @@ class Tree:
         return random.randint(int(self._size / 2) + 1, self._size)
     
     def ringLeaf(self):
-        binary = bin(Tree._numAccesses)[2:].zfill(self._height) #This entire process is best described by Missy Eliot
+        binary = (bin(Tree._numAccesses)[2:]).zfill(self._height - 1) #This entire process is best described by Missy Eliot
         #print (str(binary))
         binary = binary[::-1]
-        Tree._numAccesses = (Tree._numAccesses)%(int(math.pow(2,self._height - 1)))
-        if Tree._numAccesses == 0:
-            Tree._numAccesses = int(self._size / 2)
         Tree._numAccesses += 1
-        return (int(binary,2)+int(math.pow(2,self._height -1))-1)
+        Tree._numAccesses = (Tree._numAccesses)%(int(math.pow(2,self._height - 1)))
+        resp = self._size -(int(binary,2))
+        #print ("will return %d" %resp)
+        return resp
 
     def readBucket(self, bucketID):
         #print("BucketID is " + str(bucketID))

@@ -5,11 +5,11 @@ import Stash
 import PosMap
 
 class Oram:
-    _A = 1 #eviction period
+    _A =  1#eviction period
     _accesses = 0 #number of accesses so far
     ring = True #to ring oram or not to ring oram
     
-    def __init__(self, treeSize, z, segmentSize, maxStashSize, growR, targetR, shrinkR): # grow/shrink triggered by ratio (buckets * z) / (# of segments)
+    def __init__(self, treeSize, z, segmentSize, maxStashSize): # grow/shrink triggered by ratio (buckets * z) / (# of segments)
         self._z = z
         self._tree = Tree(treeSize, z, segmentSize) #changed to fix the existing constructor on the tree class I (akiva) wrote
         self._stash = Stash.Stash(z)
@@ -42,7 +42,7 @@ class Oram:
                 
         newLeaf = self.pickRandomLeaf() # THIS IS Pnew - AKA RANDOMLEAF()
 
-        RLOLeaf = self.pickRLOLeaf()# Prlo assumes the role of Paccess
+        #RLOLeaf = self.pickRLOLeaf()# Prlo assumes the role of Paccess
 
         for i in range(len(dataList)):
             reqResult = self._stash.request(segIDList[i])
@@ -82,7 +82,7 @@ class Oram:
             if self.debug:
                 print("\treading from path ", leaf)
 
-            return self.treeAccess(action, segIDList, dataList, leaf, newLeaf, RLOLeaf)
+            return self.treeAccess(action, segIDList, dataList, leaf, newLeaf)
     
     def pickRandomLeaf(self):
         
@@ -94,7 +94,7 @@ class Oram:
         newLeaf=self._tree.ringLeaf()
         return newLeaf 
 
-    def treeAccess(self, action, segIDList, dataList, leaf, newLeaf, RLOLeaf):
+    def treeAccess(self, action, segIDList, dataList, leaf, newLeaf):
         transfer = self._tree.readPath(leaf)
         result = dataList
 
@@ -135,6 +135,7 @@ class Oram:
                     print("new block inserted")
         
         if Oram._accesses % Oram._A == 0:
+            RLOLeaf = self.pickRLOLeaf()# Prlo assumes the role of Paccess
             self.evict(segIDList, dataList, leaf, newLeaf, RLOLeaf)
                     
         #else:
@@ -149,16 +150,16 @@ class Oram:
             #print(evictpath)
         else:
             evictpath = (leaf)
-        outPath = self._stash.evict(evictpath)
+        outPath = self._stash.evict(leaf, RLOLeaf) #old path, RLO path
         #print("Evicted")
-        if self.debug: #I'm not sure what this is supposed to mean, so I'm just gonna ignore it
+        if False: #I'm not sure what this is supposed to mean, so I'm just gonna ignore it
                        #However, I'm fairly positive it goes under eviction process...
-            print("\twriting to path", evictpath)
+            print("writing to path %d" % evictpath)
             for bucket in outPath:
                 for block in bucket:
-                    print("\t\t", block.getLeaf(), block.getSegID(), block.getData())
+                    print(block.getLeaf(), block.getSegID(), block.getData())
                 print("")
-        self._tree.writePath(leaf, outPath) #not totally sure, but i think leaf is old path, outpath is new path
+        self._tree.writePath(RLOLeaf, outPath) #not totally sure, but i think leaf is old path, outpath is new path
     
     def read(self, segID):
         return self.access("read", [segID], [None])[0]

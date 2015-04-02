@@ -15,10 +15,10 @@ key = "16characterslong"
 
 
 def TestBasic() :
-    oramsize = (1 << 4) - 1
+    oramsize = (1 << 3) - 1
     print(oramsize)
     max_stash = 300
-    oram = Oram.Oram(oramsize, 4, 4, max_stash, 1,1,1)
+    oram = Oram.Oram(oramsize, oramsize, 20, max_stash)
     for key in range(1, oramsize) :
         oram.write(key, str(key))
     passed = oramsize - 1
@@ -34,14 +34,15 @@ def TestBasic() :
 
         #print(oram._stash.getSize())
     if passed == oramsize - 1:
-        print( "TestBasic PASSED." )
+        print( "TestBasic 1 PASSED." )
     else:
-        print( "TestBasic FAILED. \n" + str(passed) + "/"+ str(oramsize - 1) + " sucessful")
+        print( "TestBasic 1 FAILED. \n(" + str(passed) + "/"+ str(oramsize - 1) + " sucessful)")
+    
 
 def TestRepeatRW() :
     oramsize = (1 << 4) - 1
     max_stash = 200
-    oram = Oram.Oram(oramsize, 4, 100, max_stash, 1,1,1)
+    oram = Oram.Oram(oramsize, 4, 100, max_stash)
     db = {}
     for key in range(1, oramsize) :
         oram.write(key, str(key))
@@ -65,7 +66,7 @@ def TestGeneral() :
     z = 3
     maxStashSize = 30
     segSize = 4096
-    oram = Oram.Oram(oramsize, z, segSize, maxStashSize, 1.8, 2, 2.2)
+    oram = Oram.Oram(oramsize, z, segSize, maxStashSize)
     
     check  = {}
     numKeys = 1000
@@ -139,7 +140,7 @@ def TestBackEv():
     print ("z = " + str(z) + ", oram size = " + str(oramsize))
     numKeys = int(oramsize*z / 2)
     for maxStashSize in range(5, 50, 5):
-        oram = Oram.Oram(oramsize, z, segSize, maxStashSize, 1.8, 2.0, 2.2)
+        oram = Oram.Oram(oramsize, z, segSize, maxStashSize)
         numBackEv = 0
         for key in range(1, numKeys+1) :                 # writes a "random" string to each key from 0 to N
             while (oram._stash.getSize() > oram._c):
