@@ -1,7 +1,6 @@
 import Tree
 
 class Block:
-  
     def __init__(self, leaf, segID, data):
         self.data = data
         self.leaf = leaf

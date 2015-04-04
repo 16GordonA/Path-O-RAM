@@ -34,7 +34,7 @@ def getMaxLevel(leaf1, leaf2):
 
 
 def getPathNodes(leaf):
-	result = []
+	result = []#CHANGE TO BUCKET NOT LISt
 	while (leaf>0):
 		result.insert(0,leaf)
 		leaf = leaf>>1
