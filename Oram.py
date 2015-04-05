@@ -92,8 +92,8 @@ class Oram:
 
     def pickRLOLeaf(self):
         newLeaf=self._tree.ringLeaf()
-        return newLeaf 
-
+        return newLeaf
+        
     def treeAccess(self, action, segIDList, dataList, leaf, newLeaf):
         transfer = self._tree.readPath(leaf)
         result = dataList

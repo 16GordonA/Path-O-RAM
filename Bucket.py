@@ -9,4 +9,5 @@ class Bucket:
 		self.blocks=blocks
 		self.leaf=leaf
 
-	def insertBlock(self, block):
+	def insertBlock(self, block,segID):
+		blocks.insert(0,block)
