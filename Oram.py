@@ -136,7 +136,7 @@ class Oram:
         
         if Oram._accesses % Oram._A == 0:
             RLOLeaf = self.pickRLOLeaf()# Prlo assumes the role of Paccess
-            self.evict(segIDList, dataList, leaf, newLeaf, RLOLeaf)
+            self.evict(leaf, newLeaf, RLOLeaf)
                     
         #else:
             #print("Chose to not Evict")
@@ -144,13 +144,13 @@ class Oram:
         Oram._accesses += 1
         return result
     
-    def evict(self, segIDList, dataList, leaf, newLeaf, RLOLeaf):
-        if(self.ring):       
+    def evict(self, leaf, newLeaf, RLOLeaf):
+        if(Oram.ring):       
             evictpath = (RLOLeaf) #if ring oram
             #print(evictpath)
         else:
             evictpath = (leaf)
-        outPath = self._stash.evict(leaf, RLOLeaf) #old path, RLO path
+        outPath = self._stash.evict(leaf, evictpath) #old path, RLO path THIS LINE DOES THE WORK, I THINK
         #print("Evicted")
         if False: #I'm not sure what this is supposed to mean, so I'm just gonna ignore it
                        #However, I'm fairly positive it goes under eviction process...
@@ -159,7 +159,7 @@ class Oram:
                 for block in bucket:
                     print(block.getLeaf(), block.getSegID(), block.getData())
                 print("")
-        self._tree.writePath(RLOLeaf, outPath) #not totally sure, but i think leaf is old path, outpath is new path
+        self._tree.writePath(evictpath, outPath) #not totally sure, but i think leaf is old path, outpath is new path
     
     def read(self, segID):
         return self.access("read", [segID], [None])[0]
