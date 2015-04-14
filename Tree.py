@@ -14,7 +14,7 @@ class Tree:
     _numAccesses = 0
     def __init__(self, nodeNumber, z, segmentSize):
         self.useRAM = True
-            
+        
         if self.useRAM:
             self._buckets = [0] * nodeNumber
         
@@ -37,7 +37,7 @@ class Tree:
     
     def ringLeaf(self):
 
-        binary = (bin(Tree._numAccesses)[2:]).zfill(self._height - 1) #This entire process is best described by Missy Eliot
+        binary = (bin(Tree._numAccesses)[2:]).zfill(self._height - 1) 
         #print (str(binary))
 
  
@@ -56,9 +56,9 @@ class Tree:
             return DBFileSys.readBucket(bucketID, self._segmentSize)
     def writeBucket(self, bucketID, blocks):
         if self.useRAM:
-            if bucketID > len(self._buckets):
-                self._buckets.append(blocks)
-            else:
+            if bucketID > len(self._buckets): #For tree auto resizing
+                self._buckets.append(blocks)  # So this is irrelevant
+            else:                             # irrelevant
                 self._buckets[bucketID - 1] = blocks
         else:
             DBFileSys.writeBucket(bucketID, blocks, self._segmentSize)
