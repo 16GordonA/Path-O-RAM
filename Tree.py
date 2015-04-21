@@ -16,7 +16,7 @@ class Tree:
         self.useRAM = True
         
         if self.useRAM:
-            self._buckets = [0] * nodeNumber
+            self._buckets = [[Block.Block(0,0,b"")]] * nodeNumber #necessary for new write setup
         
         assert (nodeNumber % 2 == 1), "tree must have odd number of buckets"
         self._size = nodeNumber
@@ -59,9 +59,21 @@ class Tree:
             if bucketID > len(self._buckets): #For tree auto resizing
                 self._buckets.append(blocks)  # So this is irrelevant
             else:                             # irrelevant
-                self._buckets[bucketID - 1] = blocks
+                for block in blocks:
+                    a = self.alreadyInBucket(self._buckets[bucketID - 1], block)
+                    if a >= 0:
+                        self._buckets[bucketID - 1][a] = block
+                    else:
+                        self._buckets[bucketID - 1].append(block)
         else:
             DBFileSys.writeBucket(bucketID, blocks, self._segmentSize)
+            
+    def alreadyInBucket(self, bucket, block):
+        for i in range(len(bucket)):
+            if bucket[i].getID() == block.getID():
+                return i
+        
+        return -1
     
     def readPath(self, leaf):
         result = []

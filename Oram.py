@@ -150,7 +150,7 @@ class Oram:
             #print(evictpath)
         else:
             evictpath = (leaf)
-        outPath = self._stash.evict(leaf, evictpath) #old path, RLO path THIS LINE DOES THE WORK, I THINK
+        outPath = self._stash.evict(evictpath) #evictpath
         #print("Evicted")
         if False: #I'm not sure what this is supposed to mean, so I'm just gonna ignore it
                        #However, I'm fairly positive it goes under eviction process...

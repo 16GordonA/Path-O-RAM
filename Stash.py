@@ -33,8 +33,8 @@ class Stash:
                     
         return "not found"
 
-    def evict(self, leaf, RLOleaf):            # returns list of the blocks that go in each node on the path as a 2d list, should compare IDs and return if found as well
-        numLevels = Util.levelNumber(RLOleaf) + 1
+    def evict(self, evictpath):            # returns list of the blocks that go in each node on the path as a 2d list, should compare IDs and return if found as well
+        numLevels = Util.levelNumber(evictpath) + 1
         result = [0] * numLevels
         for i in range(numLevels):
             result[i] = [Block.Block(0, 0, b"")] * self._z
@@ -46,7 +46,7 @@ class Stash:
         while stashIter < len(self._nodes):                                  # put nodes in the list where 0th element is 0th level, etc.
             if self._oldStash == False:
                 
-                legalLevels = Util.getMaxLevel(RLOleaf, self._nodes[stashIter].getLeaf())     # gets the number that tells which levels are allowed
+                legalLevels = Util.getMaxLevel(evictpath, self._nodes[stashIter].getLeaf())     # gets the number that tells which levels are allowed
                 #print(str(leaf) + ", " + str(self._nodes[stashIter].getLeaf()))
                 #print("legalLevels: "  + str(legalLevels))
                 availBuc = int(full) & legalLevels              # gets number that shows which buckets are available and allowed
@@ -69,7 +69,7 @@ class Stash:
             else:
                 #print ('stashIter = ' + str(stashIter))
                 #print (self._nodes[stashIter].getLeaf())
-                curLevel = Util.getMaxLevel(RLOleaf, self._nodes[stashIter].getLeaf())
+                curLevel = Util.getMaxLevel(evictpath, self._nodes[stashIter].getLeaf())
                 #if curLevel == len(pathVec):
                     #print("uh oh")               
                 while curLevel > -1:
