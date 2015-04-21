@@ -56,6 +56,7 @@ class Tree:
             return DBFileSys.readBucket(bucketID, self._segmentSize)
     def writeBucket(self, bucketID, blocks):
         if self.useRAM:
+
             if bucketID > len(self._buckets): #For tree auto resizing
                 self._buckets.append(blocks)  # So this is irrelevant
             else:                             # irrelevant
@@ -65,6 +66,7 @@ class Tree:
                         self._buckets[bucketID - 1][a] = block
                     else:
                         self._buckets[bucketID - 1].append(block)
+
         else:
             DBFileSys.writeBucket(bucketID, blocks, self._segmentSize)
             
