@@ -93,9 +93,9 @@ class Oram:
     def pickRLOLeaf(self):
         newLeaf=self._tree.ringLeaf()
         return newLeaf
-        
+
     def treeAccess(self, action, segIDList, dataList, leaf, newLeaf):
-        transfer = self._tree.readPath(leaf)
+        transfer = self._tree.readPath(leaf) #Should read *everything* if accesses % A = 0, Otherwise only read 1 block per bucket
         result = dataList
 
         for bucket in transfer:
