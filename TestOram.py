@@ -15,10 +15,10 @@ key = "16characterslong"
 
 
 def TestBasic() :
-    oramsize = (1 << 5) - 1
+    oramsize = (1 << 7) - 1
     #print(oramsize)
     max_stash = 300
-    oram = Oram.Oram(oramsize, oramsize, 20, max_stash)
+    oram = Oram.Oram(oramsize, oramsize, 5, max_stash)
     for key in range(1, oramsize) :
         oram.write(key, str(key))
     passed = oramsize - 1
@@ -58,19 +58,19 @@ def TestRepeatRW() :
 
 def TestGeneral() :
 	
-    random.seed(1)	# this guarantees we get the same random numbers, and thus same results on every run
+    #random.seed(1)	# this guarantees we get the same random numbers, and thus same results on every run
 					# Comment: When you fixed this bug, remove the previous line so you can test with random input again.
 	
-    oramsize = 101
+    oramsize = (1 << 7) - 1
     #minoramsize = 7
-    z = 3
-    maxStashSize = 30
+    z = 5
+    maxStashSize = 100
     segSize = 4096
     oram = Oram.Oram(oramsize, z, segSize, maxStashSize)
     
     check  = {}
-    numKeys = 1000
-    numTests = 1000
+    numKeys = 250 #Note, 200 takes about .2s, but 250 takes ~4s and i didn't have the energy for any more
+    numTests = numKeys
     
     lastStashSize = 0
     currentStashSize = 0
@@ -81,10 +81,10 @@ def TestGeneral() :
         check[key] = data	
 		
         currentStashSize = oram._stash.getSize()
-        #print ("ORAM Stash Size: ", currentStashSize)		
-        if 	currentStashSize - lastStashSize > 1:
-            print("Stash increases by more than 1")			
-            exit(0)
+        print ("ORAM Stash Size: " + str(currentStashSize))		
+        #if 	currentStashSize - lastStashSize > 1:
+            #print("Stash increases by more than 1")			
+            #exit(0)
         lastStashSize = currentStashSize			
     
     start = time.clock()    
@@ -125,7 +125,7 @@ def TestGeneral() :
         lastStashSize = currentStashSize
     
     timeTaken = time.clock() - start   
-    print("final stash size:", currentStashSize)
+    print("final stash size:" + str(currentStashSize))
     print("Elapsed time: " + str(timeTaken))
     print("TestGeneral Passed")
 
@@ -383,9 +383,9 @@ def PlotGS():
         print(i)
     oram._oram.GSOut.close()
  
-TestBasic()
+#TestBasic()
 #TestRepeatRW()
-#TestGeneral()
+TestGeneral()
 #cProfile.run('TestGeneral()')
 #TestBackEv()
 #cProfile.run('ORAMvsNormal()')

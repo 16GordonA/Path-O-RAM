@@ -5,7 +5,7 @@ import Stash
 import PosMap
 
 class Oram:
-    _A =  1#eviction period
+    _A =  5#eviction period
     _accesses = 0 #number of accesses so far
     ring = True #to ring oram or not to ring oram
     
@@ -148,6 +148,12 @@ class Oram:
         if(Oram.ring):       
             evictpath = (RLOLeaf) #if ring oram
             #print(evictpath)
+            
+            for bucket in self._tree.readPath(evictpath):
+                for block in bucket:
+                    if block.getSegID() != 0:
+                        self._stash.addNode(block)
+                    
         else:
             evictpath = (leaf)
         outPath = self._stash.evict(evictpath) #evictpath

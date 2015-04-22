@@ -51,11 +51,15 @@ class Tree:
     def readBucket(self, bucketID):
         #print("BucketID is " + str(bucketID))
         if self.useRAM:
-            return self._buckets[bucketID - 1]
+            a = self._buckets[bucketID - 1]
+            self._buckets[bucketID - 1] = [Block.Block(0,0,b"")]*self._z #removes block from tree
+            return a
         else:
             return DBFileSys.readBucket(bucketID, self._segmentSize)
-    def writeBucket(self, bucketID, blocks):
+    def writeBucket(self, bucketID, blocks):            #change to do this in eviction (read back evict path into stash)
         if self.useRAM:
+            self._buckets[bucketID - 1] = blocks
+            '''
             if bucketID > len(self._buckets): #For tree auto resizing
                 self._buckets.append(blocks)  # So this is irrelevant
             else:                             # irrelevant
@@ -65,6 +69,7 @@ class Tree:
                         self._buckets[bucketID - 1][a] = block
                     else:
                         self._buckets[bucketID - 1].append(block)
+            '''
         else:
             DBFileSys.writeBucket(bucketID, blocks, self._segmentSize)
             

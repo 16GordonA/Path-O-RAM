@@ -13,6 +13,7 @@ class Stash:
         return len(self._nodes)
     
     def addNode(self, block):
+          
         self._nodes.append(block)
 
     def deleteNode(self, index):
@@ -34,6 +35,7 @@ class Stash:
         return "not found"
 
     def evict(self, evictpath):            # returns list of the blocks that go in each node on the path as a 2d list, should compare IDs and return if found as well
+        #need to implement reading back evictpath into stash
         numLevels = Util.levelNumber(evictpath) + 1
         result = [0] * numLevels
         for i in range(numLevels):
