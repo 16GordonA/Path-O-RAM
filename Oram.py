@@ -95,34 +95,36 @@ class Oram:
         return newLeaf
 
     def treeAccess(self, action, segIDList, dataList, leaf, newLeaf):
-        transfer = self._tree.readPath(leaf) #Should read *everything* if accesses % A = 0, Otherwise only read 1 block per bucket
+        transfer = []
+        for segID in segIDList:
+            transfer += self._tree.readPath(leaf, segID) #only read 1 block per bucket
+        #print(transfer)
         result = dataList
 
-        for bucket in transfer:
-            for block in bucket:
-                if self.debug:
-                    print("\t\t", block.getLeaf(), block.getSegID(), block.getData())
-                if block.getSegID() != 0:
-                    if block.getSegID() in segIDList:
-                        ind = segIDList.index(block.getSegID())
-                        if action == "write":
-                            block.setData(dataList[ind])
-                            result[ind] = None
-                        else:
-                            result[ind] = block.getData()
-                        if action == "read" or action == "write":
-                            block.setLeaf(newLeaf)
-                            self._posMap.insert(segIDList[ind], block.getLeaf())
-                        if action != "delete":
-                            self._stash.addNode(block)
-                        else:
-                            self._posMap.delete(segIDList[ind])
-                            self._segCounter -= 1
-                    else:
-                        block.setLeaf(self._posMap.lookup(block.getSegID()))
-                        self._stash.addNode(block)
+        for block in transfer:
             if self.debug:
-                print("")
+                print("\t\t", block.getLeaf(), block.getSegID(), block.getData())
+            if block.getSegID() != 0:
+                if block.getSegID() in segIDList:
+                    ind = segIDList.index(block.getSegID())
+                    if action == "write":
+                        block.setData(dataList[ind])
+                        result[ind] = None
+                    else:
+                        result[ind] = block.getData()
+                    if action == "read" or action == "write":
+                        block.setLeaf(newLeaf)
+                        self._posMap.insert(segIDList[ind], block.getLeaf())
+                    if action != "delete":
+                        self._stash.addNode(block)
+                    else:
+                        self._posMap.delete(segIDList[ind])
+                        self._segCounter -= 1
+                else:
+                    block.setLeaf(self._posMap.lookup(block.getSegID()))
+                    self._stash.addNode(block)
+        if self.debug:
+            print("")
                     
         for i in range(len(segIDList)):
             if result[i] != None and action == "write":
@@ -149,7 +151,7 @@ class Oram:
             evictpath = (RLOLeaf) #if ring oram
             #print(evictpath)
             
-            for bucket in self._tree.readPath(evictpath):
+            for bucket in self._tree.readWholePath(evictpath):
                 for block in bucket:
                     if block.getSegID() != 0:
                         self._stash.addNode(block)
@@ -166,6 +168,10 @@ class Oram:
                     print(block.getLeaf(), block.getSegID(), block.getData())
                 print("")
         self._tree.writePath(evictpath, outPath) #not totally sure, but i think leaf is old path, outpath is new path
+    
+    def printBucketHeaders(self):
+        for bucket in self._tree._buckets:
+            print(bucket.header)
     
     def read(self, segID):
         return self.access("read", [segID], [None])[0]

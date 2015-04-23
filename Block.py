@@ -27,5 +27,8 @@ class Block:
     def getSegID(self):
         return self.segID
     
+    def __str__(self):
+        return data + "(leaf = " + str(leaf) + ", segID = " + str(segID) + ")"
+    
     #def getID(self):
         #return self.identifier

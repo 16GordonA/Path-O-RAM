@@ -15,13 +15,15 @@ key = "16characterslong"
 
 
 def TestBasic() :
-    oramsize = (1 << 7) - 1
+    oramsize = (1 << 4) - 1
     #print(oramsize)
     max_stash = 300
-    oram = Oram.Oram(oramsize, oramsize, 5, max_stash)
+    oram = Oram.Oram(oramsize, 5, 5, max_stash)
     for key in range(1, oramsize) :
         oram.write(key, str(key))
     passed = oramsize - 1
+    
+    oram.printBucketHeaders()
     
     for key in range(1, oramsize) :
         try :
@@ -383,9 +385,9 @@ def PlotGS():
         print(i)
     oram._oram.GSOut.close()
  
-#TestBasic()
+TestBasic()
 #TestRepeatRW()
-TestGeneral()
+#TestGeneral()
 #cProfile.run('TestGeneral()')
 #TestBackEv()
 #cProfile.run('ORAMvsNormal()')
