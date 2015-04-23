@@ -17,10 +17,11 @@ class Tree:
     def __init__(self, nodeNumber, z, A, segmentSize):
         self.useRAM = True
         
+        self._buckets = []
+        
         if self.useRAM:
-            self._buckets = [Bucket.Bucket(z, A)] * nodeNumber 
-        for bucket in self._buckets:
-            bucket.insertBlocks([])
+            for i in range(nodeNumber):
+                self._buckets.append(Bucket.Bucket(z,A))
         print("buckets created")
         
         assert (nodeNumber % 2 == 1), "tree must have odd number of buckets"

@@ -385,9 +385,9 @@ def PlotGS():
         print(i)
     oram._oram.GSOut.close()
  
-TestBasic()
+#TestBasic()
 #TestRepeatRW()
-#TestGeneral()
+TestGeneral()
 #cProfile.run('TestGeneral()')
 #TestBackEv()
 #cProfile.run('ORAMvsNormal()')
