@@ -69,7 +69,7 @@ def TestGeneral() :
     oram = Oram.Oram(oramsize, z, segSize, maxStashSize)
     
     check  = {}
-    numKeys = 250 #Note, 200 takes about .2s, but 250 takes ~4s and i didn't have the energy for any more
+    numKeys = 200 #Note, 200 takes about .2s, but 250 takes ~4s and i didn't have the energy for any more
     numTests = numKeys
     
     lastStashSize = 0

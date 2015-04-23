@@ -7,7 +7,7 @@ class Block:
         self.data = data
         self.leaf = leaf
         self.segID = segID
-        self.identifier = Block.blockCount
+        #self.identifier = Block.blockCount
         Block.blockCount += 1
 
     def getData(self):
@@ -27,5 +27,5 @@ class Block:
     def getSegID(self):
         return self.segID
     
-    def getID(self):
-        return self.identifier
+    #def getID(self):
+        #return self.identifier
