@@ -1,14 +1,22 @@
 import Block
 import Tree
+import random
 from _sha import blocksize
 
 class Bucket:	
 	
 	def __init__(self, blocks, z, S): #blocks, bucket size, number of dummies ~= A
 		self.blocks=blocks
-		self.padDummy()
 		self._z = z
 		self._S = S
+		self.padDummy()
+		self.reshuffle()
+
+	def __init__ (self, z, S):
+		self._z = z
+		self._S = S
+		self.blocks = []
+		self.padDummy()
 		self.reshuffle()
 
 	def insertBlocks(self, blocks): 
@@ -19,7 +27,10 @@ class Bucket:
 	def readOneBlock(self, segID):
 		for i in range(len(blocks)):
 			if segID in header:
-				return blocks[header.index(segID)]
+				b =  blocks[header.index(segID)]
+				blocks[header.index(segID)] = Block.Block(0,0,b"")
+				header[header.index(segID)] = -1
+				return b
 		return findDummy()
 		
 		self.accesses += 1
@@ -27,6 +38,17 @@ class Bucket:
 		if self.accesses == self._S:
 			self.reshuffle()
 
+	def readAll(self):
+		blocks = []
+		
+		for i in range(len(self.header)):
+			if self.header[i] > 0: #makes sure not dummy block
+				blocks += [self.blocks[i]]
+		
+		self.blocks = []
+		
+		return blocks
+	
 	def findDummy(self):
 		for i in range (0,len(header)):
 			if(header[i]==0):

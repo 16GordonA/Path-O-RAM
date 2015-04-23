@@ -11,7 +11,7 @@ class Oram:
     
     def __init__(self, treeSize, z, segmentSize, maxStashSize): # grow/shrink triggered by ratio (buckets * z) / (# of segments)
         self._z = z
-        self._tree = Tree(treeSize, z, segmentSize) #changed to fix the existing constructor on the tree class I (akiva) wrote
+        self._tree = Tree(treeSize, z, self._A, segmentSize) #changed to fix the existing constructor on the tree class I (akiva) wrote
         self._stash = Stash.Stash(z)
         self._posMap = PosMap.PosMap()
         self._c = maxStashSize

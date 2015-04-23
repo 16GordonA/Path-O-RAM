@@ -11,13 +11,15 @@ import Bucket
 import time
 import math
 from imaplib import Response_code
+
 class Tree:
     _numAccesses = 0
-    def __init__(self, nodeNumber, z, segmentSize):
+    def __init__(self, nodeNumber, z, A, segmentSize):
         self.useRAM = True
         
         if self.useRAM:
-            self._buckets = [[Block.Block(0,0,b"")]] * nodeNumber #necessary for new write setup
+            self._buckets = [Bucket.Bucket(z, A)] * nodeNumber 
+        
         
         assert (nodeNumber % 2 == 1), "tree must have odd number of buckets"
         self._size = nodeNumber
@@ -26,9 +28,7 @@ class Tree:
         self._segmentSize = segmentSize
         self.numGrowth = 0
         self.totalTimeGrowth = 0
-        
-        for addr in range(1, nodeNumber + 1):
-            self.writeBucket(addr, [Block.Block(0, 0, b"")] * z)
+        self._A = A #eviction frequency of ORAM
     
     def getSize(self):
         return self._size
@@ -52,28 +52,23 @@ class Tree:
     def readBucket(self, bucketID):
         #print("BucketID is " + str(bucketID))
         if self.useRAM:
-            a = self._buckets[bucketID - 1]
-            self._buckets[bucketID - 1] = [Block.Block(0,0,b"")]*self._z #removes block from tree
-            return a
+            return self._buckets[bucketID  -1].readAll()
         else:
             return DBFileSys.readBucket(bucketID, self._segmentSize)
+        
+    def readBlock(self, segID, bucketID):
+        return self.buckets[bucketID - 1].readOneBlock(segID)
+    
     def writeBucket(self, bucketID, blocks):
         if self.useRAM:
-            self._buckets[bucketID - 1] = blocks
+            self._buckets[bucketID - 1].insertBlocks(blocks)
         else:
             DBFileSys.writeBucket(bucketID, blocks, self._segmentSize)
-            
-    def alreadyInBucket(self, bucket, block):
-        for i in range(len(bucket)):
-            if bucket[i].getID() == block.getID():
-                return i
-        
-        return -1
     
-    def readPath(self, leaf):
+    def readPath(self, leaf, segID):
         result = []
         for addr in Util.getPathNodes(leaf):
-            result.append(self.readBucket(addr))
+            result.append(self.readBlock(addr)) #needs fixins
         return result
     def writePath(self, leaf, blocks):
         for addr in Util.getPathNodes(leaf):
