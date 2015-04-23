@@ -56,20 +56,9 @@ class Tree:
             return a
         else:
             return DBFileSys.readBucket(bucketID, self._segmentSize)
-    def writeBucket(self, bucketID, blocks):            #change to do this in eviction (read back evict path into stash)
+    def writeBucket(self, bucketID, blocks):
         if self.useRAM:
             self._buckets[bucketID - 1] = blocks
-            '''
-            if bucketID > len(self._buckets): #For tree auto resizing
-                self._buckets.append(blocks)  # So this is irrelevant
-            else:                             # irrelevant
-                for block in blocks:
-                    a = self.alreadyInBucket(self._buckets[bucketID - 1], block)
-                    if a >= 0:
-                        self._buckets[bucketID - 1][a] = block
-                    else:
-                        self._buckets[bucketID - 1].append(block)
-            '''
         else:
             DBFileSys.writeBucket(bucketID, blocks, self._segmentSize)
             
