@@ -104,7 +104,7 @@ class Oram:
         for block in transfer:
             if self.debug:
                 print("\t\t", block.getLeaf(), block.getSegID(), block.getData())
-            if block.getSegID() != 0:
+            if block.getSegID() > 0:
                 if block.getSegID() in segIDList:
                     ind = segIDList.index(block.getSegID())
                     if action == "write":
@@ -153,7 +153,7 @@ class Oram:
             
             for bucket in self._tree.readWholePath(evictpath):
                 for block in bucket:
-                    if block.getSegID() != 0:
+                    if block.getSegID() > 0:
                         self._stash.addNode(block)
                     
         else:

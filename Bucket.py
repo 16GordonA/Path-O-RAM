@@ -40,6 +40,9 @@ class Bucket:
 		self.reshuffle()
 
 	def readOneBlock(self, segID):
+		if self.accesses == self._S:
+			self.reshuffle()
+		
 		b = None
 		
 		for i in range(len(self.blocks)):
@@ -51,9 +54,6 @@ class Bucket:
 			b = self.findDummy()
 		
 		self.accesses += 1
-		
-		if self.accesses == self._S:
-			self.reshuffle()
 			
 		
 		#print(self.header)
@@ -61,36 +61,51 @@ class Bucket:
 
 	def readAll(self):
 		resp = []
+		'''
 		if len(self.header) != len(self.blocks):
 			print(self.header)
 			print(len(self.blocks))
+		'''
 		
 		for i in range(len(self.header)):
 			if self.header[i] > 0: #makes sure not dummy block
-				assert i < len(self.blocks), 'header length is ' + str(len(self.header)) + ' and blocks length is ' + str(len(self.blocks))
+				#assert i < len(self.blocks), 'header length is ' + str(len(self.header)) + ' and blocks length is ' + str(len(self.blocks))
 				resp += [self.blocks[i]]
 		
 		self.blocks = []
 		self.padDummy()
+		self.accesses = 0
 		
 		return resp
 	
 	def findDummy(self):
+		return self.blocks[self.desdum[self.accesses]]
+		'''
 		for i in range (0,len(self.header)):
 			if(self.header[i]==0):
 				self.header[i] = -1 #mark that it is used
 				return self.blocks[i]
+		'''
 		
-		return ErrorType()
+		#return ErrorType()
 			
 	def reshuffle(self): #shuffles blocks, reconstructs header
 		random.shuffle(self.blocks)
 		self.header = [self.blocks[i].getSegID() for i in range(len(self.blocks))]
 		self.accesses = 0
 		
+		self.desdum = []
+		for i in range(len(self.header)):
+			if self.header[i] == -2:
+				self.desdum += [i]
+		
+		random.shuffle(self.desdum)
+		
 	def padDummy(self):
-		while(len(self.blocks) < self._z+self._S):
-			self.blocks.append(Block.Block(0,0,b"")) #fills dummies
+		while(len(self.blocks) < self._z):
+			self.blocks.append(Block.Block(0,0,b"")) #fills dummies to z
+		for i in range(self._S):
+			self.blocks.append(Block.Block(0,-2,b"")) #fills designated dummies to z + S
 		#print('have ' + str(len(self.blocks)) + ' blocks')
 		
 		
